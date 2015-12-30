@@ -1,0 +1,4 @@
+{
+    "clickSound": {"category": "master","sounds": [{"name": "click","stream": false}]},
+	"beepSound": {"category": "master","sounds": [{"name": "beep","stream": false}]}
+}

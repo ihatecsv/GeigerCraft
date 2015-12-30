@@ -1,0 +1,16 @@
+tile.testSourceVeryLow.name=100uSv Test Source
+tile.testSourceLow.name=1mSv Test Source
+tile.testSourceMedium.name=10mSv Test Source
+tile.testSourceHigh.name=100mSv Test Source
+tile.testSourceVeryHigh.name=1Sv Test Source
+tile.testShield.name=Test Shield
+
+item.geigerCounter.name=Geiger Counter
+
+death.attack.radiationBurn=%1$s died from radiation burns.
+death.attack.radiationBurn.player=%1$s died from radiation burns while fighting %2$s.
+
+death.attack.radiationSickness=%1$s died from radiation sickness.
+death.attack.radiationSickness.player=%1$s died from radiation sickness while fighting %2$s.
+
+itemGroup.geigerCraft=GeigerCraft

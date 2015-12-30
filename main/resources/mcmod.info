@@ -1,0 +1,17 @@
+[
+    {
+        "modid": "geigercraft",
+        "name": "GeigerCraft",
+        "description": "Adds realistic radiation to Minecraft!",
+        "version": "",
+        "credits": "Created by Lucidity",
+        "logoFile": "assets/geigercraft/logo2.png",
+        "mcversion": "",
+        "url": "",
+        "updateUrl": "",
+        "authors": [ "Lucidity" ],
+        "parent":"",
+        "screenshots": [],
+        "dependencies": []
+    }
+]

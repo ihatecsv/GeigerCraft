@@ -1,5 +1,6 @@
 package com.halonium.geigercraft;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -30,6 +31,8 @@ public class RadiationEventHandlerFML {
                 int chunkX = (int)Math.floor(x/16);
                 int chunkZ = (int)Math.floor(z/16);
                 
+        		int cornerX = chunkX*16;
+        		int cornerZ = chunkZ*16;
                 
                 double currentRad = 0;
                 double shieldValue = 0;
@@ -44,8 +47,8 @@ public class RadiationEventHandlerFML {
 	                			String sourceName = sourceBlock.getUnlocalizedName();
 	            				int sourceMeta = player.worldObj.getBlockMetadata(point.x, point.y, point.z);
 	            				RadObj source = RadObjects.findObj(sourceName + "/" + sourceMeta);
-	            				System.out.println("Checking source at " + point.x + ", " + point.y + ", " + point.z);
-	            				System.out.println(sourceName + "/" + sourceMeta);
+	            				//System.out.println("Checking source at " + point.x + ", " + point.y + ", " + point.z);
+	            				//System.out.println(sourceName + "/" + sourceMeta);
                 				if(source != null && dist < source.radStrength){
                 					Point3D[] shielding = RadiationCalculator.traverseLine(x,y,z,point.x,point.y,point.z);
                 					for(int g = 0; g < shielding.length; g++){
@@ -64,6 +67,23 @@ public class RadiationEventHandlerFML {
                 					currentRad = (currentRad + ((source.radStrength-dist)/source.radStrength) * source.radValue) - shieldValue;
                 					if(currentRad < 0){
                 						currentRad = 0;
+                					}
+                				}
+                			}
+                		}else{
+                			RadiationEventHandler.chunkList.put(chunk, new ArrayList<Point3D>());
+                			for(int i = cornerX; i < cornerX+16; i++){
+                				for(int k = cornerZ; k < cornerZ+16; k++){
+                					for(int j = 0; j < 256; j++){
+                						Block sourceBlock = player.worldObj.getBlock(i, j, k);
+                						String sourceName = sourceBlock.getUnlocalizedName();
+                		    			int sourceMeta = player.worldObj.getBlockMetadata(i, j, k);
+                						RadObj source = RadObjects.findObj(sourceName + "/" + sourceMeta);
+                						if(source != null){
+                							RadiationEventHandler.chunkList.get(chunk).add(new Point3D(i, j, k));
+                							System.out.println("Found new sourceblock at " + i + ", " + j + ", " + k);
+                							System.out.println(sourceName + "/" + sourceMeta);
+                						}
                 					}
                 				}
                 			}

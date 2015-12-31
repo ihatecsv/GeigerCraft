@@ -129,22 +129,6 @@ public class RadiationEventHandler {
 		
 		if(chunkList.containsKey(chunk)){
 			chunkList.remove(chunk);
-			chunkList.put(chunk, new ArrayList<Point3D>());
-			for(int i = cornerX; i < cornerX+16; i++){
-				for(int k = cornerZ; k < cornerZ+16; k++){
-					for(int j = 0; j < 256; j++){
-						Block sourceBlock = event.world.getBlock(i, j, k);
-						String sourceName = sourceBlock.getUnlocalizedName();
-		    			int sourceMeta = event.world.getBlockMetadata(i, j, k);
-						RadObj source = RadObjects.findObj(sourceName + "/" + sourceMeta);
-						if(source != null){
-							chunkList.get(chunk).add(new Point3D(i, j, k));
-							System.out.println("Found new sourceblock at " + i + ", " + j + ", " + k);
-							System.out.println(sourceName + "/" + sourceMeta);
-						}
-					}
-				}
-			}
 		}
 	}
 }

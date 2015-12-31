@@ -1,7 +1,7 @@
-package com.lucidity.geigercraft;
+package com.halonium.geigercraft;
 
-import com.lucidity.geigercraft.refs.Reference;
-import com.lucidity.geigercraft.refs.RegisterHelper;
+import com.halonium.geigercraft.refs.Reference;
+import com.halonium.geigercraft.refs.RegisterHelper;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -21,7 +21,7 @@ public class GeigerCraft {
 	@Instance(value = Reference.MODID)
     public static GeigerCraft instance = new GeigerCraft();
 	
-	@SidedProxy(clientSide="com.lucidity.geigercraft.ClientProxy", serverSide="com.lucidity.geigercraft.ServerProxy")
+	@SidedProxy(clientSide="com.halonium.geigercraft.ClientProxy", serverSide="com.halonium.geigercraft.ServerProxy")
 	public static CommonProxy proxy;
 	
 	@EventHandler

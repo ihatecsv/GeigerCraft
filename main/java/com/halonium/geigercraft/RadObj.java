@@ -1,4 +1,4 @@
-package com.lucidity.geigercraft;
+package com.halonium.geigercraft;
 
 public class RadObj {
 	public String id;

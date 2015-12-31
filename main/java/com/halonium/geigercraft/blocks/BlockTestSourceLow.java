@@ -1,7 +1,7 @@
-package com.lucidity.geigercraft.blocks;
+package com.halonium.geigercraft.blocks;
 
-import com.lucidity.geigercraft.CommonProxy;
-import com.lucidity.geigercraft.refs.Reference;
+import com.halonium.geigercraft.CommonProxy;
+import com.halonium.geigercraft.refs.Reference;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

@@ -1,9 +1,9 @@
-package com.lucidity.geigercraft.items;
+package com.halonium.geigercraft.items;
 
-import com.lucidity.geigercraft.CommonProxy;
-import com.lucidity.geigercraft.ExtendedPropertiesRadTarget;
-import com.lucidity.geigercraft.RadiationCalculator;
-import com.lucidity.geigercraft.refs.Reference;
+import com.halonium.geigercraft.CommonProxy;
+import com.halonium.geigercraft.ExtendedPropertiesRadTarget;
+import com.halonium.geigercraft.RadiationCalculator;
+import com.halonium.geigercraft.refs.Reference;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;

@@ -1,7 +1,7 @@
-package com.lucidity.geigercraft.blocks;
+package com.halonium.geigercraft.blocks;
 
-import com.lucidity.geigercraft.CommonProxy;
-import com.lucidity.geigercraft.refs.Reference;
+import com.halonium.geigercraft.CommonProxy;
+import com.halonium.geigercraft.refs.Reference;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -11,10 +11,10 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
-public class BlockTestSourceVeryHigh extends Block{
-	public BlockTestSourceVeryHigh(){
+public class BlockTestSourceMedium extends Block{
+	public BlockTestSourceMedium(){
 		super(Material.redstoneLight);
-		setBlockName("testSourceVeryHigh");
+		setBlockName("testSourceMedium");
 		setHardness(0.8F);
 		setBlockTextureName(Reference.MODID + ":" + getUnlocalizedName().substring(5));
 		setCreativeTab(CommonProxy.tabGeigerCraft);

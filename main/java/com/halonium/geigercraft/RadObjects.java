@@ -1,4 +1,4 @@
-package com.lucidity.geigercraft;
+package com.halonium.geigercraft;
 
 import net.minecraft.block.material.Material;
 

@@ -1,8 +1,10 @@
-package com.lucidity.geigercraft;
+package com.halonium.geigercraft;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.common.MinecraftForge;
 
 public class ServerProxy extends CommonProxy{
 	@Override

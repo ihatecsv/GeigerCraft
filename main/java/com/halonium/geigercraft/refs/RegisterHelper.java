@@ -1,4 +1,4 @@
-package com.lucidity.geigercraft.refs;
+package com.halonium.geigercraft.refs;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;

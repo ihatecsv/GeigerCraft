@@ -1,4 +1,4 @@
-package com.lucidity.geigercraft;
+package com.halonium.geigercraft;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;

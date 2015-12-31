@@ -1,13 +1,13 @@
-package com.lucidity.geigercraft;
+package com.halonium.geigercraft;
 
-import com.lucidity.geigercraft.blocks.BlockTestShield;
-import com.lucidity.geigercraft.blocks.BlockTestSourceHigh;
-import com.lucidity.geigercraft.blocks.BlockTestSourceLow;
-import com.lucidity.geigercraft.blocks.BlockTestSourceMedium;
-import com.lucidity.geigercraft.blocks.BlockTestSourceVeryHigh;
-import com.lucidity.geigercraft.blocks.BlockTestSourceVeryLow;
-import com.lucidity.geigercraft.items.ItemGeigerCounter;
-import com.lucidity.geigercraft.refs.RegisterHelper;
+import com.halonium.geigercraft.blocks.BlockTestShield;
+import com.halonium.geigercraft.blocks.BlockTestSourceHigh;
+import com.halonium.geigercraft.blocks.BlockTestSourceLow;
+import com.halonium.geigercraft.blocks.BlockTestSourceMedium;
+import com.halonium.geigercraft.blocks.BlockTestSourceVeryHigh;
+import com.halonium.geigercraft.blocks.BlockTestSourceVeryLow;
+import com.halonium.geigercraft.items.ItemGeigerCounter;
+import com.halonium.geigercraft.refs.RegisterHelper;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;

@@ -1,4 +1,4 @@
-package com.lucidity.geigercraft.refs;
+package com.halonium.geigercraft.refs;
 
 public class Reference {
 	public static final String MODID = "geigercraft";

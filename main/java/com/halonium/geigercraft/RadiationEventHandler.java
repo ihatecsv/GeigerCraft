@@ -7,6 +7,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -84,9 +85,10 @@ public class RadiationEventHandler {
 				for(int k = cornerZ; k < cornerZ+16; k++){
 					for(int j = 0; j < 256; j++){
 						Block sourceBlock = event.world.getBlock(i, j, k);
-						String sourceName = sourceBlock.getUnlocalizedName();
-	    				int sourceMeta = event.world.getBlockMetadata(i, j, k);
-						RadObj source = RadObjects.findObj(sourceName + "/" + sourceMeta);
+						int sourceMeta = event.world.getBlockMetadata(i, j, k);
+        				String sourceModId = GameRegistry.findUniqueIdentifierFor(sourceBlock).modId;
+        				String sourceName = GameRegistry.findUniqueIdentifierFor(sourceBlock).name;
+        				RadObj source = RadObjects.findObj(sourceModId + ":" + sourceName + "/" + sourceMeta);
 						if(source != null){
 							chunkList.get(chunk).add(new Point3D(i, j, k));
 							System.out.println("Found new sourceblock at " + i + ", " + j + ", " + k);

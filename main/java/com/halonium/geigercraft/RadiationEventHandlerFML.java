@@ -6,6 +6,7 @@ import java.util.Random;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
@@ -47,18 +48,19 @@ public class RadiationEventHandlerFML {
                 			for(Point3D point : RadiationEventHandler.chunkList.get(chunk)){
                 				double dist = Math.sqrt(((point.x-urX)*(point.x-urX))+((point.y-urY)*(point.y-urY))+((point.z-urZ)*(point.z-urZ)));
                 				Block sourceBlock = player.worldObj.getBlock(point.x, point.y, point.z);
-	                			String sourceName = sourceBlock.getUnlocalizedName();
 	            				int sourceMeta = player.worldObj.getBlockMetadata(point.x, point.y, point.z);
-	            				RadObj source = RadObjects.findObj(sourceName + "/" + sourceMeta);
+	            				String sourceModId = GameRegistry.findUniqueIdentifierFor(sourceBlock).modId;
+	            				String sourceName = GameRegistry.findUniqueIdentifierFor(sourceBlock).name;
+	            				RadObj source = RadObjects.findObj(sourceModId + ":" + sourceName + "/" + sourceMeta);
 	            				//System.out.println("Checking source at " + point.x + ", " + point.y + ", " + point.z);
-	            				//System.out.println(sourceName + "/" + sourceMeta);
                 				if(source != null && dist < source.radStrength){
                 					Point3D[] shielding = RadiationCalculator.traverseLine(x,y,z,point.x,point.y,point.z);
                 					for(int g = 0; g < shielding.length; g++){
                 						Block shieldBlock = player.worldObj.getBlock(shielding[g].x, shielding[g].y, shielding[g].z);
-                						String shieldName = shieldBlock.getUnlocalizedName();
-        	            				int shieldMeta = player.worldObj.getBlockMetadata(shielding[g].x, shielding[g].y, shielding[g].z);
-                						RadObj shield = RadObjects.findObj(shieldName + "/" + shieldMeta);
+                						int shieldMeta = player.worldObj.getBlockMetadata(shielding[g].x, shielding[g].y, shielding[g].z);
+        	            				String shieldModId = GameRegistry.findUniqueIdentifierFor(shieldBlock).modId;
+        	            				String shieldName = GameRegistry.findUniqueIdentifierFor(shieldBlock).name;
+        	            				RadObj shield = RadObjects.findObj(shieldModId + ":" + shieldName + "/" + shieldMeta);
                 						if(shield != null){
                 							if(shield.absorbValue > 0){
                 								shieldValue = shieldValue + shield.absorbValue;
@@ -97,9 +99,10 @@ public class RadiationEventHandlerFML {
                 				for(int k = cornerZ; k < cornerZ+16; k++){
                 					for(int j = 0; j < 256; j++){
                 						Block sourceBlock = player.worldObj.getBlock(i, j, k);
-                						String sourceName = sourceBlock.getUnlocalizedName();
-                		    			int sourceMeta = player.worldObj.getBlockMetadata(i, j, k);
-                						RadObj source = RadObjects.findObj(sourceName + "/" + sourceMeta);
+                						int sourceMeta = player.worldObj.getBlockMetadata(i, j, k);
+                        				String sourceModId = GameRegistry.findUniqueIdentifierFor(sourceBlock).modId;
+                        				String sourceName = GameRegistry.findUniqueIdentifierFor(sourceBlock).name;
+                        				RadObj source = RadObjects.findObj(sourceModId + ":" + sourceName + "/" + sourceMeta);
                 						if(source != null){
                 							RadiationEventHandler.chunkList.get(chunk).add(new Point3D(i, j, k));
                 							System.out.println("Found new sourceblock at " + i + ", " + j + ", " + k);

@@ -13,8 +13,11 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.ChunkCoordIntPair;
 
 public class RadiationEventHandlerFML {
+	
+	Random rand = new Random();
+	
 	@SubscribeEvent
-	public void onPlayerTickEvent(PlayerTickEvent event) {
+	public void calculateRadValue(PlayerTickEvent event) {
 		if(event.phase == TickEvent.Phase.END){ 
             if(event.side.isServer()) { 
             	EntityPlayer player = (EntityPlayer)event.player;
@@ -34,8 +37,8 @@ public class RadiationEventHandlerFML {
         		int cornerX = chunkX*16;
         		int cornerZ = chunkZ*16;
                 
-                double currentRad = 0;
                 double shieldValue = 0;
+                props.lastRad = 0;
                 
                 for(int n=chunkX-2; n < chunkX+2; n++){
                 	for(int m=chunkZ-2; m < chunkZ+2; m++){
@@ -64,10 +67,28 @@ public class RadiationEventHandlerFML {
                 							shieldValue = shieldValue + RadObjects.materialVal(shieldBlock.getMaterial());
                 						}
                 					}
-                					currentRad = (currentRad + ((source.radStrength-dist)/source.radStrength) * source.radValue) - shieldValue;
-                					if(currentRad < 0){
-                						currentRad = 0;
+                					props.lastRad = (props.lastRad + ((source.radStrength-dist)/source.radStrength) * source.radValue) - shieldValue;
+                					if(props.lastRad < 0){
+                						props.lastRad = 0;
                 					}
+                					/*if(currentRad > 1){
+                						player.attackEntityFrom(RadiationDamageSource.radiationBurn, (float)(currentRad)*5.0F);
+                					}*/
+                			          
+                					if(rand.nextInt(100) < 1){
+                						if(props.dose > 30){
+                							player.attackEntityFrom(RadiationDamageSource.radiationSickness, (float)(10.0F));
+                						}else if(props.dose > 8){
+                							player.attackEntityFrom(RadiationDamageSource.radiationSickness, (float)(8.0F));
+                						}else if(props.dose > 6){
+                							player.attackEntityFrom(RadiationDamageSource.radiationSickness, (float)(5.0F));
+                						}else if(props.dose > 2){
+                							player.attackEntityFrom(RadiationDamageSource.radiationSickness, (float)(2.0F));
+                						}else if(props.dose > 1){
+                							player.attackEntityFrom(RadiationDamageSource.radiationSickness, (float)(1.0F));
+                						}
+                					}
+                					props.dose = props.dose + (props.lastRad/216000); //Sped up
                 				}
                 			}
                 		}else{
@@ -90,32 +111,23 @@ public class RadiationEventHandlerFML {
                 		}
                 	}
                 }
-                Random rand = new Random();
-                double randDose = Math.random()*0.0000001;
-                if(rand.nextInt(20) < 1){
-                	randDose = randDose + Math.random()*0.0000001;
-                }
-                currentRad = currentRad + randDose;
-                /*if(currentRad > 1){
-                	player.attackEntityFrom(RadiationDamageSource.radiationBurn, (float)(currentRad)*5.0F);
-                }*/
-                
-                if(rand.nextInt(100) < 1){
-	                if(props.dose > 30){
-	                	player.attackEntityFrom(RadiationDamageSource.radiationSickness, (float)(10.0F));
-	                }else if(props.dose > 8){
-	                	player.attackEntityFrom(RadiationDamageSource.radiationSickness, (float)(8.0F));
-	                }else if(props.dose > 6){
-	                	player.attackEntityFrom(RadiationDamageSource.radiationSickness, (float)(5.0F));
-	                }else if(props.dose > 2){
-	                	player.attackEntityFrom(RadiationDamageSource.radiationSickness, (float)(2.0F));
-	                }else if(props.dose > 1){
-	                	player.attackEntityFrom(RadiationDamageSource.radiationSickness, (float)(1.0F));
-	                }
-                }
-                //dose = dose + (currentRad/216000); //Accurate
-                props.dose = props.dose + (currentRad/2000); //Sped up
-                props.lastRad = currentRad;
+            }
+		}
+	}
+	
+	@SubscribeEvent
+	public void geigerCount(PlayerTickEvent event){
+		if(event.phase == TickEvent.Phase.END){ 
+            if(event.side.isServer()) { 
+            	EntityPlayer player = (EntityPlayer)event.player;
+				ExtendedPropertiesRadTarget props = ExtendedPropertiesRadTarget.get(player);
+				
+				double randRad = Math.random()*0.0000001;
+				if(rand.nextInt(20) < 1){
+					randRad = randRad + Math.random()*0.0000001;
+				}
+				props.lastRad = props.lastRad + randRad;
+				
 				if(player.getCurrentEquippedItem() != null){
 					if(player.getCurrentEquippedItem().getItem().getUnlocalizedName().equals("item.geigerCounter")){
 						player.addChatMessage(new ChatComponentText(EnumChatFormatting.DARK_AQUA + "----------------"));

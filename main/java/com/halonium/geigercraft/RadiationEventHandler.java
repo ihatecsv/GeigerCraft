@@ -116,7 +116,6 @@ public class RadiationEventHandler {
 	
 	@SubscribeEvent
 	public void onBlockEvent(BlockEvent event){
-		System.out.println("BEEEEEEP");
 		int posX = event.x;
 		int posY = event.y;
 		int posZ = event.z;

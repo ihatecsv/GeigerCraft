@@ -16,7 +16,7 @@ import net.minecraft.world.ChunkCoordIntPair;
 public class RadiationEventHandlerFML {
 	
 	Random rand = new Random();
-	
+	int tickCounter = 0;
 	@SubscribeEvent
 	public void calculateRadValue(PlayerTickEvent event) {
 		if(event.phase == TickEvent.Phase.END){ 
@@ -54,6 +54,7 @@ public class RadiationEventHandlerFML {
 	            				RadObj source = RadObjects.findObj(sourceModId + ":" + sourceName + "/" + sourceMeta);
 	            				//System.out.println("Checking source at " + point.x + ", " + point.y + ", " + point.z);
                 				if(source != null && dist < source.radStrength){
+                					System.out.println(tickCounter);
                 					Point3D[] shielding = RadiationCalculator.traverseLine(x,y,z,point.x,point.y,point.z);
                 					for(int g = 0; g < shielding.length; g++){
                 						Block shieldBlock = player.worldObj.getBlock(shielding[g].x, shielding[g].y, shielding[g].z);
@@ -70,27 +71,14 @@ public class RadiationEventHandlerFML {
                 						}
                 					}
                 					props.lastRad = (props.lastRad + ((source.radStrength-dist)/source.radStrength) * source.radValue) - shieldValue;
+                					System.out.println(props.lastRad);
                 					if(props.lastRad < 0){
                 						props.lastRad = 0;
                 					}
+                					System.out.println(props.lastRad);
                 					/*if(currentRad > 1){
                 						player.attackEntityFrom(RadiationDamageSource.radiationBurn, (float)(currentRad)*5.0F);
                 					}*/
-                			          
-                					if(rand.nextInt(100) < 1){
-                						if(props.dose > 30){
-                							player.attackEntityFrom(RadiationDamageSource.radiationSickness, (float)(10.0F));
-                						}else if(props.dose > 8){
-                							player.attackEntityFrom(RadiationDamageSource.radiationSickness, (float)(8.0F));
-                						}else if(props.dose > 6){
-                							player.attackEntityFrom(RadiationDamageSource.radiationSickness, (float)(5.0F));
-                						}else if(props.dose > 2){
-                							player.attackEntityFrom(RadiationDamageSource.radiationSickness, (float)(2.0F));
-                						}else if(props.dose > 1){
-                							player.attackEntityFrom(RadiationDamageSource.radiationSickness, (float)(1.0F));
-                						}
-                					}
-                					props.dose = props.dose + (props.lastRad/216000); //Sped up
                 				}
                 			}
                 		}else{
@@ -114,57 +102,77 @@ public class RadiationEventHandlerFML {
                 		}
                 	}
                 }
+                tickCounter++;
             }
 		}
 	}
 	
+	private int tickCount;
 	@SubscribeEvent
 	public void geigerCount(PlayerTickEvent event){
 		if(event.phase == TickEvent.Phase.END){ 
             if(event.side.isServer()) { 
-            	EntityPlayer player = (EntityPlayer)event.player;
-				ExtendedPropertiesRadTarget props = ExtendedPropertiesRadTarget.get(player);
-				
-				double randRad = Math.random()*0.0000001;
-				if(rand.nextInt(20) < 1){
-					randRad = randRad + Math.random()*0.0000001;
-				}
-				props.lastRad = props.lastRad + randRad;
-				
-				if(player.getCurrentEquippedItem() != null){
-					if(player.getCurrentEquippedItem().getItem().getUnlocalizedName().equals("item.geigerCounter")){
-						player.addChatMessage(new ChatComponentText(EnumChatFormatting.DARK_AQUA + "----------------"));
-						player.addChatMessage(new ChatComponentText("Current readings: " + RadiationCalculator.formatSv(props.lastRad, true)));
-		                player.addChatMessage(new ChatComponentText("Current dose: " + RadiationCalculator.formatSv(props.dose, false)));
-		                //player.addChatMessage(new ChatComponentText("Pos: ยง4" + x + " ยง2" + y + " ยง1" + z));
-		                player.addChatMessage(new ChatComponentText(EnumChatFormatting.DARK_AQUA + "----------------"));
-						if(props.lastRad != 0){
-							if(props.lastRad > 0.001){
-								//player.worldObj.playSoundAtEntity(player, "geigercraft:clickSound", 1.0F, 1.0F);
-			            	}else if(props.lastRad > 0.0001){
-			            		if(rand.nextInt(2)<1){
-			            			player.worldObj.playSoundAtEntity(player, "geigercraft:clickSound", 1.0F, 1.0F);
-			            		}
-			            	}else if(props.lastRad > 0.00001){
-			            		if(rand.nextInt(4)<1){
-			            			player.worldObj.playSoundAtEntity(player, "geigercraft:clickSound", 1.0F, 1.0F);
-			            		}
-			            	}else if(props.lastRad >= 0.000001){
-			            		if(rand.nextInt(8)<1){
-			            			player.worldObj.playSoundAtEntity(player, "geigercraft:clickSound", 1.0F, 1.0F);
-			            		}
-			            	}else if(props.lastRad >= 0.0000001){
-			            		if(rand.nextInt(16)<1){
-			            			player.worldObj.playSoundAtEntity(player, "geigercraft:clickSound", 1.0F, 1.0F);
-			            		}
-			            	}else if(props.lastRad < 0.0000001){
-			            		if(rand.nextInt(32)<1){
-			            			player.worldObj.playSoundAtEntity(player, "geigercraft:clickSound", 1.0F, 1.0F);
-			            		}
-			            	}
+            	if(tickCount > 10){
+            		tickCount = 0;
+	            	EntityPlayer player = (EntityPlayer)event.player;
+					ExtendedPropertiesRadTarget props = ExtendedPropertiesRadTarget.get(player);
+					
+					double randRad = Math.random()*0.0000001;
+					if(rand.nextInt(20) < 1){
+						randRad = randRad + Math.random()*0.0000001;
+					}
+					props.lastRad = props.lastRad + randRad;
+					
+					if(rand.nextInt(100) < 1){
+						if(props.dose > 30){
+							player.attackEntityFrom(RadiationDamageSource.radiationSickness, (float)(10.0F));
+						}else if(props.dose > 8){
+							player.attackEntityFrom(RadiationDamageSource.radiationSickness, (float)(8.0F));
+						}else if(props.dose > 6){
+							player.attackEntityFrom(RadiationDamageSource.radiationSickness, (float)(5.0F));
+						}else if(props.dose > 2){
+							player.attackEntityFrom(RadiationDamageSource.radiationSickness, (float)(2.0F));
+						}else if(props.dose > 1){
+							player.attackEntityFrom(RadiationDamageSource.radiationSickness, (float)(1.0F));
 						}
 					}
-				}
+					props.dose = props.dose + (props.lastRad/216000); //Sped up
+					
+					if(player.getCurrentEquippedItem() != null){
+						if(player.getCurrentEquippedItem().getItem().getUnlocalizedName().equals("item.geigerCounter")){
+							player.addChatMessage(new ChatComponentText(EnumChatFormatting.DARK_AQUA + "----------------"));
+							player.addChatMessage(new ChatComponentText("Current readings: " + RadiationCalculator.formatSv(props.lastRad, true)));
+			                player.addChatMessage(new ChatComponentText("Current dose: " + RadiationCalculator.formatSv(props.dose, false)));
+			                player.addChatMessage(new ChatComponentText(EnumChatFormatting.DARK_AQUA + "----------------"));
+							if(props.lastRad != 0){
+								if(props.lastRad > 0.001){
+									//player.worldObj.playSoundAtEntity(player, "geigercraft:clickSound", 1.0F, 1.0F);
+				            	}else if(props.lastRad > 0.0001){
+				            		if(rand.nextInt(2)<1){
+				            			player.worldObj.playSoundAtEntity(player, "geigercraft:clickSound", 1.0F, 1.0F);
+				            		}
+				            	}else if(props.lastRad > 0.00001){
+				            		if(rand.nextInt(4)<1){
+				            			player.worldObj.playSoundAtEntity(player, "geigercraft:clickSound", 1.0F, 1.0F);
+				            		}
+				            	}else if(props.lastRad >= 0.000001){
+				            		if(rand.nextInt(8)<1){
+				            			player.worldObj.playSoundAtEntity(player, "geigercraft:clickSound", 1.0F, 1.0F);
+				            		}
+				            	}else if(props.lastRad >= 0.0000001){
+				            		if(rand.nextInt(16)<1){
+				            			player.worldObj.playSoundAtEntity(player, "geigercraft:clickSound", 1.0F, 1.0F);
+				            		}
+				            	}else if(props.lastRad < 0.0000001){
+				            		if(rand.nextInt(32)<1){
+				            			player.worldObj.playSoundAtEntity(player, "geigercraft:clickSound", 1.0F, 1.0F);
+				            		}
+				            	}
+							}
+						}
+					}
+	            }
+            	tickCount++;
             }
 		}
 	}

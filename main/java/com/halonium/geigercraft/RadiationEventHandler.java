@@ -7,6 +7,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -71,8 +72,7 @@ public class RadiationEventHandler {
 		int chunkX = event.getChunk().xPosition;
 		int chunkZ = event.getChunk().zPosition;
 		int cornerX = chunkX*16;
-		int cornerZ = chunkZ*16;
-		
+		int cornerZ = chunkZ*16;	
 		//System.out.println("chunk at " + chunkX + ", " + chunkZ + " getting loaded");
 		//System.out.println("Boundaries at " + cornerX + ", " + cornerZ);
 		//System.out.println("-----------------------------");
@@ -80,13 +80,14 @@ public class RadiationEventHandler {
 		if(!chunkList.containsKey(chunk)){
 			chunkList.put(chunk, new ArrayList<Point3D>());
 			//System.out.println(chunkList.size());
-			for(int i = cornerX; i < cornerX+16; i++){
-				for(int k = cornerZ; k < cornerZ+16; k++){
-					for(int j = 0; j < 256; j++){
+			for(int i = cornerX; i <= cornerX+15; i++){
+				for(int k = cornerZ; k <= cornerZ+15; k++){
+					for(int j = 0; j <= 255; j++){
 						Block sourceBlock = event.world.getBlock(i, j, k);
-						String sourceName = sourceBlock.getUnlocalizedName();
-	    				int sourceMeta = event.world.getBlockMetadata(i, j, k);
-						RadObj source = RadObjects.findObj(sourceName + "/" + sourceMeta);
+						int sourceMeta = event.world.getBlockMetadata(i, j, k);
+        				String sourceModId = GameRegistry.findUniqueIdentifierFor(sourceBlock).modId;
+        				String sourceName = GameRegistry.findUniqueIdentifierFor(sourceBlock).name;
+        				RadObj source = RadObjects.findObj(sourceModId + ":" + sourceName + "/" + sourceMeta);
 						if(source != null){
 							chunkList.get(chunk).add(new Point3D(i, j, k));
 							System.out.println("Found new sourceblock at " + i + ", " + j + ", " + k);
@@ -119,8 +120,8 @@ public class RadiationEventHandler {
 		int posY = event.y;
 		int posZ = event.z;
 		
-		int chunkX = (int)Math.floor(posX/16);
-		int chunkZ = (int)Math.floor(posZ/16);
+		int chunkX = (int)Math.floor((double)posX/16);
+		int chunkZ = (int)Math.floor((double)posZ/16);
 		
 		int cornerX = chunkX*16;
 		int cornerZ = chunkZ*16;

@@ -1,5 +1,7 @@
 package com.halonium.geigercraft.items;
 
+import java.util.List;
+
 import com.halonium.geigercraft.CommonProxy;
 import com.halonium.geigercraft.ExtendedPropertiesRadTarget;
 import com.halonium.geigercraft.RadiationCalculator;
@@ -11,6 +13,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 public class ItemGeigerCounter extends Item{
@@ -34,4 +37,10 @@ public class ItemGeigerCounter extends Item{
 		}
 		return true;
 	}*/
+	
+	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean Adva){
+		String name = StatCollector.translateToLocal(stack.getUnlocalizedName() + ".name");
+		stack.setStackDisplayName(EnumChatFormatting.GOLD + name);
+		
+	}
 }

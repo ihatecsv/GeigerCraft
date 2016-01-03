@@ -69,29 +69,31 @@ public class RadiationEventHandler {
 	
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public void onChunkLoad(ChunkEvent.Load event) { 
-		int chunkX = event.getChunk().xPosition;
-		int chunkZ = event.getChunk().zPosition;
-		int cornerX = chunkX*16;
-		int cornerZ = chunkZ*16;	
-		//System.out.println("chunk at " + chunkX + ", " + chunkZ + " getting loaded");
-		//System.out.println("Boundaries at " + cornerX + ", " + cornerZ);
-		//System.out.println("-----------------------------");
-		ChunkCoordIntPair chunk = new ChunkCoordIntPair(chunkX,chunkZ);
-		if(!chunkList.containsKey(chunk)){
-			chunkList.put(chunk, new ArrayList<Point3D>());
-			//System.out.println(chunkList.size());
-			for(int i = cornerX; i <= cornerX+15; i++){
-				for(int k = cornerZ; k <= cornerZ+15; k++){
-					for(int j = 0; j <= 255; j++){
-						Block sourceBlock = event.world.getBlock(i, j, k);
-						int sourceMeta = event.world.getBlockMetadata(i, j, k);
-        				String sourceModId = GameRegistry.findUniqueIdentifierFor(sourceBlock).modId;
-        				String sourceName = GameRegistry.findUniqueIdentifierFor(sourceBlock).name;
-        				RadObj source = RadObjects.findObj(sourceModId + ":" + sourceName + "/" + sourceMeta);
-						if(source != null){
-							chunkList.get(chunk).add(new Point3D(i, j, k));
-							System.out.println("Found new sourceblock at " + i + ", " + j + ", " + k);
-							System.out.println(sourceName + "/" + sourceMeta);
+		if(event.world.isRemote){
+			int chunkX = event.getChunk().xPosition;
+			int chunkZ = event.getChunk().zPosition;
+			int cornerX = chunkX*16;
+			int cornerZ = chunkZ*16;	
+			//System.out.println("chunk at " + chunkX + ", " + chunkZ + " getting loaded");
+			//System.out.println("Boundaries at " + cornerX + ", " + cornerZ);
+			//System.out.println("-----------------------------");
+			ChunkCoordIntPair chunk = new ChunkCoordIntPair(chunkX,chunkZ);
+			if(!chunkList.containsKey(chunk)){
+				chunkList.put(chunk, new ArrayList<Point3D>());
+				//System.out.println(chunkList.size());
+				for(int i = cornerX; i <= cornerX+15; i++){
+					for(int k = cornerZ; k <= cornerZ+15; k++){
+						for(int j = 0; j <= 255; j++){
+							Block sourceBlock = event.world.getBlock(i, j, k);
+							int sourceMeta = event.world.getBlockMetadata(i, j, k);
+	        				String sourceModId = GameRegistry.findUniqueIdentifierFor(sourceBlock).modId;
+	        				String sourceName = GameRegistry.findUniqueIdentifierFor(sourceBlock).name;
+	        				RadObj source = RadObjects.findObj(sourceModId + ":" + sourceName + "/" + sourceMeta);
+							if(source != null){
+								chunkList.get(chunk).add(new Point3D(i, j, k));
+								System.out.println("Found new sourceblock at " + i + ", " + j + ", " + k);
+								System.out.println(sourceName + "/" + sourceMeta);
+							}
 						}
 					}
 				}
